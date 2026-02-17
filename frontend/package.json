@@ -1,0 +1,12 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo 'TODO: crea app React (vite/cra)'; exit 1",
+    "build": "echo 'TODO'; exit 1",
+    "test": "echo 'TODO'; exit 1",
+    "lint": "echo 'TODO'; exit 1",
+    "e2e": "echo 'TODO'; exit 1"
+  }
+}

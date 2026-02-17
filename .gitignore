@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.Python
+.venv/
+venv/
+.env
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+
+# Playwright
+playwright-report/
+blob-report/
+.test-results/
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+
+# OS
+.DS_Store
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Logs
+*.log
