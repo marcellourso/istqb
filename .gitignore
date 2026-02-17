@@ -17,6 +17,9 @@ venv/
 coverage.xml
 htmlcov/
 
+# Packaging metadata
+backend/*.egg-info/
+
 # Node
 node_modules/
 dist/
