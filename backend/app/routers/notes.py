@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from app import analyzer
 from app.db import get_db
 from app.models import Analysis, Note, Task
-from app.schemas import AnalysisMode, AnalysisOut, NoteCreate, NoteOut, TaskCreate, TaskOut
+from app.schemas import AnalysisMode, AnalysisOut, AnalysisResult, NoteCreate, NoteDetailOut, NoteOut, TaskCreate, TaskOut
 
 logger = logging.getLogger("app.notes")
 
@@ -31,12 +31,37 @@ def list_notes(db: Annotated[Session, Depends(get_db)]):
     return db.query(Note).order_by(Note.id.desc()).all()
 
 
-@router.get("/notes/{note_id}", response_model=NoteOut)
+@router.get("/notes/{note_id}", response_model=NoteDetailOut)
 def get_note(note_id: int, db: Annotated[Session, Depends(get_db)]):
     note = db.get(Note, note_id)
     if not note:
         raise HTTPException(status_code=404, detail="Note not found")
-    return note
+
+    latest = (
+        db.query(Analysis)
+        .filter(Analysis.note_id == note_id, Analysis.mode == "rules")
+        .order_by(Analysis.id.desc())
+        .first()
+    )
+
+    latest_analysis = None
+    if latest:
+        tasks = latest.raw_response.split("\n") if latest.raw_response else []
+        latest_analysis = AnalysisResult(
+            mode="rules",
+            summary=latest.summary,
+            priority=latest.priority,
+            tasks=tasks,
+        )
+
+    return NoteDetailOut(
+        id=note.id,
+        title=note.title,
+        content=note.content,
+        created_at=note.created_at,
+        tasks=[TaskOut.model_validate(t) for t in note.tasks],
+        latest_analysis=latest_analysis,
+    )
 
 
 @router.post("/notes/{note_id}/tasks", response_model=TaskOut, status_code=status.HTTP_201_CREATED)
@@ -51,7 +76,7 @@ def create_task(note_id: int, payload: TaskCreate, db: Annotated[Session, Depend
     return task
 
 
-@router.post("/notes/{note_id}/analyze", response_model=AnalysisOut, status_code=status.HTTP_201_CREATED)
+@router.post("/notes/{note_id}/analyze", response_model=AnalysisResult, status_code=status.HTTP_201_CREATED)
 def analyze_note(
     note_id: int,
     mode: Annotated[AnalysisMode, Query()],
@@ -83,4 +108,9 @@ def analyze_note(
     db.commit()
     db.refresh(analysis)
 
-    return analysis
+    return AnalysisResult(
+        mode="rules",
+        summary=analysis.summary,
+        priority=analysis.priority,
+        tasks=tasks,
+    )

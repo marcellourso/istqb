@@ -1,0 +1,29 @@
+.toast {
+  position: fixed;
+  right: 16px;
+  top: 16px;
+  background: #111827;
+  color: #fff;
+  padding: 12px 12px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 420px;
+  z-index: 1000;
+}
+
+.toast__message {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.toast__close {
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}

@@ -53,3 +53,21 @@ class AnalysisOut(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class AnalysisResult(BaseModel):
+    mode: AnalysisMode
+    summary: str
+    priority: Literal["low", "medium", "high"]
+    tasks: list[str]
+
+
+class NoteDetailOut(BaseModel):
+    id: int
+    title: str
+    content: str
+    created_at: datetime
+    tasks: list[TaskOut]
+    latest_analysis: Optional[AnalysisResult] = None
+
+    model_config = {"from_attributes": True}
