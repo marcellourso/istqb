@@ -10,12 +10,15 @@ from app.main import app
 from app.db import get_db, Base
 
 
+
 # 1️⃣ Crea un database temporaneo SQLite per i test
 @pytest.fixture(scope="session")
 def test_engine():
     # crea un file temporaneo per il DB
     fd, path = tempfile.mkstemp()
     os.close(fd)
+
+    print("Test DB path:", path)
 
     engine = create_engine(
         f"sqlite:///{path}",
