@@ -34,3 +34,7 @@ def test_create_task_and_toggle(client):
 
     assert len(data["tasks"]) == 1
     assert data["tasks"][0]["done"] is True
+
+def test_toggle_task_non_existing_returns_404(client):
+    r = client.patch("/tasks/999999", json={"done": True})
+    assert r.status_code == 404
