@@ -30,3 +30,9 @@ def test_compute_summary_is_truncated_to_180_chars():
     summary = compute_summary(text)
     assert len(summary) == 180
     assert summary == "A" * 180
+
+import pytest
+
+def test_compute_summary_none_input_raises_error():
+    with pytest.raises(AttributeError):
+        compute_summary(None)
