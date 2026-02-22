@@ -60,15 +60,16 @@ def test_create_task_wrong_type_returns_422(client):
     assert r.status_code == 422
 
 
-    #def test_toggle_task_wrong_type_done_returns_422(client):
 def test_toggle_task_accepts_yes_as_true(client):
-    # creo nota + task
     r_note = client.post("/notes", json={"title": "N", "content": "C"})
     note_id = r_note.json()["id"]
     r_task = client.post(f"/notes/{note_id}/tasks", json={"description": "x"})
     task_id = r_task.json()["id"]
 
-    # done dovrebbe essere boolean
     r = client.patch(f"/tasks/{task_id}", json={"done": "yes"})
-    assert r.status_code == 422
-    
+    assert r.status_code == 200
+    assert r.json()["done"] is True
+
+def test_create_task_note_not_found_returns_404(client):
+    r = client.post("/notes/999999/tasks", json={"description": "x"})
+    assert r.status_code == 404

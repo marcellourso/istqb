@@ -36,3 +36,8 @@ import pytest
 def test_compute_summary_none_input_raises_error():
     with pytest.raises(AttributeError):
         compute_summary(None)
+
+def test_compute_summary_no_sentence_split_falls_back():
+    text = "Testo senza alcun punto interrogativo o esclamativo"
+    summary = compute_summary(text)
+    assert summary == text[:180]

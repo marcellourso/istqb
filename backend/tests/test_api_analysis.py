@@ -34,3 +34,7 @@ def test_analyze_ai_returns_501(client):
 
     r = client.post(f"/notes/{note_id}/analyze", params={"mode": "ai"})
     assert r.status_code == 501
+
+def test_analyze_note_not_found_returns_404(client):
+    r = client.post("/notes/999999/analyze", params={"mode": "rules"})
+    assert r.status_code == 404
